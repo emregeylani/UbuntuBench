@@ -2,18 +2,17 @@ import time
 import psutil
 import os
 import platform
-import subprocess
 from multiprocessing import Pool
 
+# CPU task for benchmarking
+def cpu_task(n):
+    total = 0
+    for i in range(n):
+        total += i ** 0.5
+    return total
+
 # CPU Benchmark
-
 def cpu_benchmark():
-    def cpu_task(n):
-        total = 0
-        for i in range(n):
-            total += i ** 0.5
-        return total
-
     num_processes = psutil.cpu_count(logical=True)
     n = 10**6
     print("Starting CPU benchmark...")
@@ -25,7 +24,6 @@ def cpu_benchmark():
     return elapsed_time
 
 # Memory Benchmark
-
 def memory_benchmark():
     print("Starting memory benchmark...")
     data = []
@@ -41,7 +39,6 @@ def memory_benchmark():
     return elapsed_time
 
 # Disk Benchmark
-
 def disk_benchmark():
     print("Starting disk benchmark...")
     file_size = 10**7  # 10 MB
@@ -93,3 +90,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
