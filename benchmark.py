@@ -2,9 +2,11 @@ import time
 import psutil
 import os
 import platform
+import subprocess
+import re
 from multiprocessing import Pool
 
-# CPU task for benchmarking
+# CPU Task Function
 def cpu_task(n):
     total = 0
     for i in range(n):
@@ -41,24 +43,56 @@ def memory_benchmark():
 # Disk Benchmark
 def disk_benchmark():
     print("Starting disk benchmark...")
-    file_size = 10**7  # 10 MB
+    file_size = 10**8  # 100 MB (increased from 10 MB)
     filename = "disk_benchmark.tmp"
-    data = bytearray(os.urandom(file_size))
+    data = bytearray(os.urandom(file_size))  # Create a 100 MB random data block
 
+    # Measure write time
     start_time = time.time()
     with open(filename, "wb") as f:
         f.write(data)
     write_time = time.time() - start_time
 
+    # Measure read time
     start_time = time.time()
     with open(filename, "rb") as f:
         f.read()
     read_time = time.time() - start_time
 
+    # Clean up
     os.remove(filename)
+
     print(f"Disk write completed in {write_time:.2f} seconds.")
     print(f"Disk read completed in {read_time:.2f} seconds.")
     return write_time, read_time
+
+# Grading Results
+def grade_result(category, time, thresholds):
+    for grade, threshold in thresholds.items():
+        if time <= threshold:
+            return f"{category}: {grade} ({time:.2f} seconds)"
+    return f"{category}: F ({time:.2f} seconds)"
+
+# HDD/SSD and RAM details
+def get_disk_details():
+    try:
+        result = subprocess.check_output(["lsblk", "-o", "NAME,ROTA,MODEL,SIZE"], text=True)
+        print("\nDisk Details:")
+        print(result)
+    except Exception as e:
+        print(f"Error retrieving disk details: {e}")
+
+def get_ram_details():
+    try:
+        result = subprocess.check_output(["dmidecode", "-t", "memory"], text=True)
+        ram_info = []
+        for line in result.splitlines():
+            if re.match(r"^\t(Speed|Manufacturer|Part Number):", line):
+                ram_info.append(line.strip())
+        print("\nRAM Details:")
+        print("\n".join(ram_info))
+    except Exception as e:
+        print(f"Error retrieving RAM details: {e}")
 
 # System Info
 def system_info():
@@ -70,23 +104,37 @@ def system_info():
         "Processor": platform.processor(),
         "CPU Cores": psutil.cpu_count(logical=True),
         "Memory": f"{psutil.virtual_memory().total / 1e9:.2f} GB",
+        "Disk Total": f"{psutil.disk_usage('/').total / 1e9:.2f} GB",
+        "Disk Used": f"{psutil.disk_usage('/').used / 1e9:.2f} GB",
+        "Disk Free": f"{psutil.disk_usage('/').free / 1e9:.2f} GB",
     }
     for k, v in info.items():
         print(f"{k}: {v}")
+    
+    get_disk_details()
+    get_ram_details()
 
 # Main Function
 def main():
     system_info()
     print("\nStarting benchmarks...\n")
+    
+    # Define grading thresholds
+    cpu_thresholds = {"A+": 0.5, "A": 1.0, "B": 2.0, "C": 3.0, "D": 5.0}
+    memory_thresholds = {"A+": 0.5, "A": 1.0, "B": 2.0, "C": 3.0, "D": 5.0}
+    disk_thresholds = {"A+": 0.05, "A": 0.1, "B": 0.2, "C": 0.5, "D": 1.0}
+
+    # Run benchmarks
     cpu_time = cpu_benchmark()
     memory_time = memory_benchmark()
     write_time, read_time = disk_benchmark()
 
+    # Grade results
     print("\nBenchmark Results:")
-    print(f"CPU Time: {cpu_time:.2f} seconds")
-    print(f"Memory Time: {memory_time:.2f} seconds")
-    print(f"Disk Write Time: {write_time:.2f} seconds")
-    print(f"Disk Read Time: {read_time:.2f} seconds")
+    print(grade_result("CPU", cpu_time, cpu_thresholds))
+    print(grade_result("Memory", memory_time, memory_thresholds))
+    print(grade_result("Disk Write", write_time, disk_thresholds))
+    print(grade_result("Disk Read", read_time, disk_thresholds))
 
 if __name__ == "__main__":
     main()

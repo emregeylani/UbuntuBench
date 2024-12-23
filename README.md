@@ -1,93 +1,95 @@
-# Laptop Performance Benchmark
+# UbuntuBench
 
-This Python script benchmarks the performance of your laptop running Ubuntu (Budgie). It evaluates CPU, memory, and disk performance, and provides system information for reference.
+UbuntuBench is a Python-based benchmarking tool designed to evaluate CPU, memory, and disk performance on Linux systems. It also provides detailed system information, including hardware specifications such as RAM and disk details.
 
 ## Features
-
-- **CPU Benchmark**: Measures the computation time using parallel processes.
-- **Memory Benchmark**: Tests memory allocation and performance.
-- **Disk Benchmark**: Evaluates disk read/write speeds using temporary files.
-- **System Information**: Displays details about your operating system, processor, memory, and more.
+- Benchmarks CPU performance using multiprocessing.
+- Tests memory performance by allocating memory blocks.
+- Evaluates disk read/write speed.
+- Gathers system information, including OS details, processor specifications, RAM, and disk type (HDD/SSD).
 
 ## Prerequisites
+- Python 3.6+
+- `psutil` library
+- Root privileges for detailed hardware information (required for `dmidecode` command).
 
-Ensure you have Python 3 installed on your system. The script also requires the `psutil` library, which can be installed using pip:
-
+### Install Dependencies
 ```bash
 pip install psutil
 ```
 
-## How to Use
+### Additional Tools (Linux)
+Ensure the following commands are available:
+- `lsblk`
+- `dmidecode`
 
-1. Clone this repository or download the script.
-2. Run the script using Python:
+On Ubuntu, install these with:
+```bash
+sudo apt update
+sudo apt install util-linux dmidecode
+```
 
+## Usage
+1. Clone the repository:
    ```bash
-   python3 benchmark.py
+   git clone https://github.com/your-repo/UbuntuBench.git
+   cd UbuntuBench
+   ```
+2. Run the script:
+   ```bash
+   sudo python3 benchmark.py
    ```
 
-3. View the benchmark results and system information in the terminal.
+> **Note:** Running as root (`sudo`) is required to retrieve detailed RAM and disk information using `dmidecode`.
 
-## Output
-
-The script provides the following:
-
-- **CPU Benchmark**: Time taken to execute parallel tasks across all cores.
-- **Memory Benchmark**: Time taken to allocate memory blocks up to 1 GB.
-- **Disk Benchmark**: Time taken to write and read a 10 MB temporary file.
-- **System Information**: Details about the OS, processor, memory, and CPU cores.
-
-## Example Output
-
-```text
+## Sample Output
+```plaintext
 Gathering system information...
 OS: Linux
-OS Version: #22-Ubuntu SMP Wed Dec 20 12:34:56 UTC 2023
-OS Release: 5.15.0-73-generic
-Processor: Intel(R) Core(TM) i7-1165G7 @ 2.80GHz
-CPU Cores: 8
-Memory: 16.00 GB
+OS Version: #14-Ubuntu SMP PREEMPT_DYNAMIC Sat Nov 30 23:51:51 UTC 2024
+OS Release: 6.11.0-13-generic
+Processor: x86_64
+CPU Cores: 4
+Memory: 8.20 GB
+Disk Total: 512.00 GB
+Disk Used: 120.00 GB
+Disk Free: 392.00 GB
+
+Disk Details:
+NAME ROTA MODEL             SIZE
+sda  0    Samsung SSD 970   512G
+
+RAM Details:
+Speed: 3200 MT/s
+Manufacturer: Corsair
+Part Number: CMK16GX4M2B3200C16
 
 Starting benchmarks...
 
 Starting CPU benchmark...
-CPU benchmark completed in 4.32 seconds.
+CPU benchmark completed in 0.42 seconds.
 
 Starting memory benchmark...
-Memory benchmark completed in 3.45 seconds.
+Memory benchmark completed in 1.32 seconds.
 
 Starting disk benchmark...
-Disk write completed in 0.12 seconds.
-Disk read completed in 0.08 seconds.
+Disk write completed in 0.10 seconds.
+Disk read completed in 0.05 seconds.
 
 Benchmark Results:
-CPU Time: 4.32 seconds
-Memory Time: 3.45 seconds
-Disk Write Time: 0.12 seconds
-Disk Read Time: 0.08 seconds
+CPU: A+ (0.42 seconds)
+Memory: A (1.32 seconds)
+Disk Write: A (0.10 seconds)
+Disk Read: A+ (0.05 seconds)
 ```
 
-## Safety
-
-This script is safe to use. It:
-
-- Does not modify your system or files.
-- Cleans up temporary files after disk benchmarking.
-- Handles memory allocation errors gracefully.
-
-However, ensure you:
-
-- Save your work before running the script, as high resource usage might slow other tasks.
-- Run the script on AC power to prevent rapid battery drain.
-
 ## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## Contributing
+Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-## Contributions
+## Disclaimer
+This tool is designed for benchmarking purposes. Running the script with `sudo` may pose security risks. Use at your own discretion.
 
-Contributions are welcome! Feel free to open issues or submit pull requests with improvements or new features.
 
----
-
-Happy benchmarking!
