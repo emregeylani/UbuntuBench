@@ -15,7 +15,7 @@ def cpu_task(n):
 # CPU Benchmark
 def cpu_benchmark():
     num_processes = psutil.cpu_count(logical=True)
-    n = 10**6
+    n = 10**7  # Increased workload
     print("Starting CPU benchmark...")
     start_time = time.time()
     with Pool(num_processes) as pool:
@@ -28,10 +28,10 @@ def cpu_benchmark():
 def memory_benchmark():
     print("Starting memory benchmark...")
     data = []
-    block_size = 10**7  # 10 MB blocks
+    block_size = 10**8  # 100 MB blocks (increased size)
     start_time = time.time()
     try:
-        for _ in range(100):  # Up to 1 GB
+        for _ in range(50):  # Up to 5 GB
             data.append(bytearray(block_size))
     except MemoryError:
         pass
@@ -42,9 +42,9 @@ def memory_benchmark():
 # Disk Benchmark
 def disk_benchmark():
     print("Starting disk benchmark...")
-    file_size = 10**8  # 100 MB
+    file_size = 10**9  # 1 GB (increased size)
     filename = "disk_benchmark.tmp"
-    data = bytearray(os.urandom(file_size))  # Create a 100 MB random data block
+    data = bytearray(os.urandom(file_size))  # Create a 1 GB random data block
 
     # Measure write time
     start_time = time.time()
@@ -114,9 +114,9 @@ def main():
     print("\nStarting benchmarks...\n")
     
     # Define grading thresholds
-    cpu_thresholds = {"A+": 0.5, "A": 1.0, "B": 2.0, "C": 3.0, "D": 5.0}
-    memory_thresholds = {"A+": 0.5, "A": 1.0, "B": 2.0, "C": 3.0, "D": 5.0}
-    disk_thresholds = {"A+": 0.05, "A": 0.1, "B": 0.2, "C": 0.5, "D": 1.0}
+    cpu_thresholds = {"A+": 2.0, "A": 4.0, "B": 6.0, "C": 8.0, "D": 10.0}  # Adjusted thresholds
+    memory_thresholds = {"A+": 1.0, "A": 2.0, "B": 4.0, "C": 6.0, "D": 8.0}
+    disk_thresholds = {"A+": 0.5, "A": 1.0, "B": 2.0, "C": 4.0, "D": 6.0}
 
     # Run benchmarks
     cpu_time = cpu_benchmark()
