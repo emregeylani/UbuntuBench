@@ -114,9 +114,9 @@ def main():
     print("\nStarting benchmarks...\n")
     
     # Define grading thresholds
-    cpu_thresholds = {"A+": 2.0, "A": 4.0, "B": 6.0, "C": 8.0, "D": 10.0}  # Adjusted thresholds
-    memory_thresholds = {"A+": 1.0, "A": 2.0, "B": 4.0, "C": 6.0, "D": 8.0}
-    disk_thresholds = {"A+": 0.5, "A": 1.0, "B": 2.0, "C": 4.0, "D": 6.0}
+    cpu_thresholds = {"A+": 1.0, "A": 2.0, "B": 4.0, "C": 6.0, "D": 8.0}  # Stricter thresholds
+    memory_thresholds = {"A+": 0.5, "A": 1.0, "B": 2.0, "C": 4.0, "D": 6.0}
+    disk_thresholds = {"A+": 0.25, "A": 0.5, "B": 1.0, "C": 2.0, "D": 4.0}
 
     # Run benchmarks
     cpu_time = cpu_benchmark()
