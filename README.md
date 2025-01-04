@@ -1,17 +1,16 @@
 # UbuntuBench
 
-UbuntuBench is a Python-based benchmarking tool designed to evaluate CPU, memory, and disk performance on Linux systems. It also provides detailed system information, including hardware specifications such as RAM and disk details.
+UbuntuBench is a Python-based benchmarking tool designed to evaluate CPU, memory, and disk performance on Linux systems. It also provides basic system information, including hardware specifications such as RAM and disk details.
 
 ## Features
 - Benchmarks CPU performance using multiprocessing.
 - Tests memory performance by allocating memory blocks.
 - Evaluates disk read/write speed.
-- Gathers system information, including OS details, processor specifications, RAM, and disk type (HDD/SSD).
+- Gathers system information, including OS details, processor specifications, RAM, and disk usage.
 
 ## Prerequisites
 - Python 3.6+
 - `psutil` library
-- Root privileges for detailed hardware information (required for `dmidecode` command).
 
 ### Install Dependencies
 ```bash
@@ -19,14 +18,13 @@ pip install psutil
 ```
 
 ### Additional Tools (Linux)
-Ensure the following commands are available:
+Ensure the following command is available:
 - `lsblk`
-- `dmidecode`
 
-On Ubuntu, install these with:
+On Ubuntu, install it with:
 ```bash
 sudo apt update
-sudo apt install util-linux dmidecode
+sudo apt install util-linux
 ```
 
 ## Usage
@@ -37,10 +35,10 @@ sudo apt install util-linux dmidecode
    ```
 2. Run the script:
    ```bash
-   sudo python3 benchmark.py
+   python3 benchmark.py
    ```
 
-> **Note:** Running as root (`sudo`) is required to retrieve detailed RAM and disk information using `dmidecode`.
+> **Note:** The script no longer requires `sudo` for basic functionality. However, detailed hardware information (e.g., RAM speed and manufacturer) is no longer included to avoid requiring elevated privileges.
 
 ## Sample Output
 ```plaintext
@@ -60,9 +58,8 @@ NAME ROTA MODEL             SIZE
 sda  0    Samsung SSD 970   512G
 
 RAM Details:
-Speed: 3200 MT/s
-Manufacturer: Corsair
-Part Number: CMK16GX4M2B3200C16
+Total Memory: 8.20 GB
+Available Memory: 6.50 GB
 
 Starting benchmarks...
 
@@ -90,6 +87,6 @@ This project is licensed under the MIT License. See the LICENSE file for details
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 
 ## Disclaimer
-This tool is designed for benchmarking purposes. Running the script with `sudo` may pose security risks. Use at your own discretion.
+This tool is designed for benchmarking purposes. It does not require `sudo` privileges to run, making it safe for use without elevated permissions.
 
 
