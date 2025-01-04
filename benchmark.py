@@ -3,7 +3,6 @@ import psutil
 import os
 import platform
 import subprocess
-import re
 from multiprocessing import Pool
 
 # CPU Task Function
@@ -43,7 +42,7 @@ def memory_benchmark():
 # Disk Benchmark
 def disk_benchmark():
     print("Starting disk benchmark...")
-    file_size = 10**8  # 100 MB (increased from 10 MB)
+    file_size = 10**8  # 100 MB
     filename = "disk_benchmark.tmp"
     data = bytearray(os.urandom(file_size))  # Create a 100 MB random data block
 
@@ -73,7 +72,7 @@ def grade_result(category, time, thresholds):
             return f"{category}: {grade} ({time:.2f} seconds)"
     return f"{category}: F ({time:.2f} seconds)"
 
-# HDD/SSD and RAM details
+# Disk Details
 def get_disk_details():
     try:
         result = subprocess.check_output(["lsblk", "-o", "NAME,ROTA,MODEL,SIZE"], text=True)
@@ -82,17 +81,12 @@ def get_disk_details():
     except Exception as e:
         print(f"Error retrieving disk details: {e}")
 
+# RAM Details
 def get_ram_details():
-    try:
-        result = subprocess.check_output(["dmidecode", "-t", "memory"], text=True)
-        ram_info = []
-        for line in result.splitlines():
-            if re.match(r"^\t(Speed|Manufacturer|Part Number):", line):
-                ram_info.append(line.strip())
-        print("\nRAM Details:")
-        print("\n".join(ram_info))
-    except Exception as e:
-        print(f"Error retrieving RAM details: {e}")
+    memory = psutil.virtual_memory()
+    print("\nRAM Details:")
+    print(f"Total Memory: {memory.total / 1e9:.2f} GB")
+    print(f"Available Memory: {memory.available / 1e9:.2f} GB")
 
 # System Info
 def system_info():
