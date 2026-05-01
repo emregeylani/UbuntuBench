@@ -10,12 +10,6 @@ UbuntuBench is a Python-based benchmarking tool designed to evaluate CPU, memory
 
 ## Prerequisites
 - Python 3.6+
-- `psutil` library
-
-### Install Dependencies
-```bash
-pip install psutil
-```
 
 ### Additional Tools (Linux)
 Ensure the following command is available:
